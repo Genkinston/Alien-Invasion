@@ -16,7 +16,11 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode((
+            self.settings.screen_width,
+            self.settings.screen_height
+            ))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
 
@@ -68,16 +72,17 @@ class AlienInvasion:
             self.ship.moving_left = False
 
     def _fire_bullet(self):
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
 
     def _update_screen(self):
         # При каждом переходе цикла перерисовывается экран.
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-        self.ship.blitme()
 
+        self.ship.blitme()
         pygame.display.flip()
 
 
