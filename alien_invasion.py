@@ -36,13 +36,9 @@ class AlienInvasion:
             # Отслеживает события клавиатуры и мыши
             self._check_events()
             self.ship.update()
-            self.bullets.update()
+            self._update_bullets()
             self._update_screen()
             self.clock.tick(60)
-            # Удаление снарядов, вышедших за край экрана.
-            for bullet in self.bullets.copy():
-                if bullet.rect.bottom <= 0:
-                    self.bullets.remove(bullet)
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -76,12 +72,21 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
+    def _update_bullets(self):
+        """Обновляет позиции снарядов и уничтожает старые снаряды."""
+        # Обновление позиции снарядов
+        self.bullets.update()
+
+        # Удаление снарядов, вышедших за край экрана.
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
     def _update_screen(self):
         # При каждом переходе цикла перерисовывается экран.
         self.screen.fill(self.settings.bg_color)
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
-
         self.ship.blitme()
         pygame.display.flip()
 
