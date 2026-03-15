@@ -17,11 +17,11 @@ class AlienInvasion:
 
         self.clock = pygame.time.Clock()
         self.settings = Settings()
-        # self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        self.screen = pygame.display.set_mode((
-            self.settings.screen_width,
-            self.settings.screen_height
-            ))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.screen = pygame.display.set_mode((
+        #     self.settings.screen_width,
+        #     self.settings.screen_height
+        #     ))
         self.settings.screen_width = self.screen.get_rect().width
         self.settings.screen_height = self.screen.get_rect().height
 
@@ -42,6 +42,7 @@ class AlienInvasion:
             self._check_events()
             self.ship.update()
             self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self.clock.tick(60)
 
@@ -94,7 +95,7 @@ class AlienInvasion:
         # и одну высоту пришельца.
         alien = Alien(self)
         alien_width, alien_height = alien.rect.size
-        
+
         current_x, current_y = alien_width, alien_height
         while current_y < (self.settings.screen_height - 3 * alien_height):
             while current_x < (self.settings.screen_width - 2 * alien_width):
@@ -112,6 +113,27 @@ class AlienInvasion:
         new_alien.rect.x = x_position
         new_alien.rect.y = y_position
         self.aliens.add(new_alien)
+
+    def _check_fleet_edges(self):
+        """Реагирует на достижение пришельцем края экрана"""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+                break
+
+    def _change_fleet_direction(self):
+        """Опускает весь флот и меняет его направление."""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
+
+    def _update_aliens(self):
+        """
+        Проверяет, достиг ли флот края экрана, с последующим обновлением 
+        позиций всех пришельцев во флоте.
+        """
+        self._check_fleet_edges()
+        self.aliens.update()
 
     def _update_screen(self):
         # При каждом переходе цикла перерисовывается экран.
