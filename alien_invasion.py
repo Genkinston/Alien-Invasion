@@ -152,6 +152,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active = False
+            pygame.mouse.set_visible(True)
 
     def _create_fleet(self):
         """Создает флот пришельцев."""
