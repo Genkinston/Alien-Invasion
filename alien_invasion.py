@@ -135,9 +135,11 @@ class AlienInvasion:
             self.bullets, self.aliens, True, True
         )
         if not self.aliens:
-            # Уничтожение существующих снарядов и создание нового флота.
+            # Уничтожение существующих снарядов, повышение скорости
+            # и создание нового флота.
             self.bullets.empty()
             self._create_fleet()
+            self.settings.increase_speed()
 
     def _ship_hit(self):
         """Обрабатывает столкновение корабля с пришельцем."""
