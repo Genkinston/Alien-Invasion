@@ -29,6 +29,10 @@ class Button:
         self.msg_image_rect = self.msg_image.get_rect()
         self.msg_image_rect.center = self.rect.center
 
+    def _update_msg_position(self):
+        """If the button has been moved, the text needs to be moved as well."""
+        self.msg_image_rect.center = self.rect.center
+
     def draw_button(self):
         """Отображает пустую кнопку и выводит сообщение."""
         # Фон кнопки

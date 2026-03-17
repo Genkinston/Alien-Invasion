@@ -24,16 +24,38 @@ class Settings:
         # Темп ускорения игры
         self.speedup_scale = 1.1
 
+        self.difficulty_level = 'easy'
+
         self.initialize_dynamic_settings()
 
     def initialize_dynamic_settings(self):
         """Инициализирует настройки, изменяющиеся в ходе игры."""
-        self.ship_speed = 1.5
-        self.bullet_speed = 2.5
-        self.alien_speed = 1.0
+        if self.difficulty_level == 'easy':
+            self.ship_limit = 5
+            self.bullets_allowed = 10
+            self.ship_speed = 0.75
+            self.bullet_speed = 1.5
+            self.alien_speed = 0.5
+        elif self.difficulty_level == 'medium':
+            self.ship_limit = 3
+            self.bullets_allowed = 3
+            self.ship_speed = 1.5
+            self.bullet_speed = 3.0
+            self.alien_speed = 1.0
+        elif self.difficulty_level == 'hard':
+            self.ship_limit = 2
+            self.bullets_allowed = 3
+            self.ship_speed = 3.0
+            self.bullet_speed = 6.0
+            self.alien_speed = 2.0
 
-        # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
-        self.fleet_direction = 1
+    def set_difficulty(self, diff_setting):
+        if diff_setting == 'easy':
+            print('easy')
+        elif diff_setting == 'medium':
+            print('medium')
+        elif diff_setting == 'difficult':
+            print('hard')
 
     def increase_speed(self):
         """Увеличивает настройки скорости."""
