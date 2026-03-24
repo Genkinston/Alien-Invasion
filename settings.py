@@ -11,7 +11,7 @@ class Settings:
         self.ship_limit = 3
         # Параметры снаряда
         self.bullet_speed = 2.5
-        self.bullet_width = 3000
+        self.bullet_width = 300
         self.bullet_height = 15
         self.bullet_color = (60, 60, 60)
         self.bullets_allowed = 3
@@ -23,6 +23,9 @@ class Settings:
 
         # Темп ускорения игры
         self.speedup_scale = 1.1
+
+        # Темп роста стоимости пришельцев.
+        self.score_scale = 1.5
 
         self.difficulty_level = 'easy'
 
@@ -49,6 +52,9 @@ class Settings:
             self.bullet_speed = 6.0
             self.alien_speed = 2.0
 
+        # Подсчёт очков
+        self.alien_points = 50
+
     def set_difficulty(self, diff_setting):
         if diff_setting == 'easy':
             print('easy')
@@ -58,7 +64,9 @@ class Settings:
             print('hard')
 
     def increase_speed(self):
-        """Увеличивает настройки скорости."""
+        """Увеличивает настройки скорости и стоимости пришельцев."""
         self.ship_speed *= self.speedup_scale
         self.bullet_speed *= self.speedup_scale
         self.alien_speed *= self.speedup_scale
+
+        self.alien_points = int(self.alien_points * self.score_scale)

@@ -4,6 +4,7 @@ import pygame
 
 from settings import Settings
 from game_stats import GameStats
+from scoreboard import Scoreboard
 from button import Button
 from ship import Ship
 from bullet import Bullet
@@ -39,7 +40,9 @@ class AlienInvasion:
         pygame.display.set_caption("Alien Invasion")
 
         # Создание экземпляра для хранения игровой статистики
+        # и панели результатов.
         self.stats = GameStats(self)
+        self.sb = Scoreboard(self)
 
         self.ship = Ship(self)
 
@@ -98,8 +101,8 @@ class AlienInvasion:
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
         if button_clicked and not self.game_active:
             # Сброс игровых настроек
-            self.settings.initialize_dynamic_settings()
             self._start_game()
+            self.sb.prep_score()
 
     def _check_difficulty_buttons(self, mouse_pos):
         """Set the appropriate difficulty level."""
@@ -116,6 +119,9 @@ class AlienInvasion:
             self.settings.difficulty_level = 'hard'
 
     def _start_game(self):
+        # Сброс настроек игры
+        self.settings.initialize_dynamic_settings()
+
         # Сброс игровой статистики
         self.stats.reset_stats()
         self.game_active = True
@@ -179,6 +185,10 @@ class AlienInvasion:
             self.bullets.empty()
             self._create_fleet()
             self.settings.increase_speed()
+
+        if collisions:
+            for aliens in collisions.values():
+                self.stats.score += self.settings.alien_points * len(aliens)
 
     def _ship_hit(self):
         """Обрабатывает столкновение корабля с пришельцем."""
@@ -267,6 +277,9 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.ship.blitme()
         self.aliens.draw(self.screen)
+
+        # Вывод информации о счете.
+        self.sb.show_score()
 
         # Кнопка Play отображается в том случае, если игра неактивна.
         if not self.game_active:
